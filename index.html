@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordexes &mdash; IA Aplicada</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:#060606;color:#e8e8e8;overflow-x:hidden}
+:root{
+  --lime:#c8f000;--dark:#060606;--dark2:#0c0c0c;--dark3:#111;
+  --card:#161616;--border:rgba(200,240,0,0.15);--muted:#888;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 3rem;background:rgba(6,6,6,0.92);
+  backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+}
+.nav-logo img{height:38px}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--lime)}
+
+/* HERO */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:0 8vw;position:relative;overflow:hidden;background:#060606;
+}
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(200,240,0,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(200,240,0,0.04) 1px,transparent 1px);
+  background-size:72px 72px;
+}
+.hero-glow{
+  position:absolute;top:-25%;left:-5%;width:80vw;height:80vw;
+  background:radial-gradient(circle,rgba(200,240,0,0.08) 0%,transparent 55%);
+  pointer-events:none;
+}
+.hero-content{position:relative;z-index:1}
+.hero-tag{
+  font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--lime);
+  margin-bottom:2rem;display:inline-flex;align-items:center;gap:1rem;
+}
+.hero-tag::before{content:'';display:block;width:2.5rem;height:1px;background:var(--lime)}
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4.5rem,13vw,11rem);line-height:0.88;color:#fff;
+}
+.hero-title em{font-style:normal;-webkit-text-stroke:1.5px var(--lime);color:transparent}
+.hero-sub{margin-top:2.5rem;font-size:1.05rem;color:var(--muted);max-width:460px;line-height:1.8;font-weight:300}
+.hero-cta{
+  margin-top:3rem;display:inline-flex;align-items:center;gap:1rem;
+  font-size:0.75rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--lime);text-decoration:none;border:1px solid var(--lime);padding:1rem 2.2rem;
+  transition:all 0.25s;
+}
+.hero-cta:hover{background:var(--lime);color:#000}
+.hero-scroll{
+  position:absolute;bottom:3rem;right:3rem;writing-mode:vertical-rl;
+  font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:1rem;
+}
+.hero-scroll::after{content:'';display:block;width:1px;height:4.5rem;background:linear-gradient(to bottom,var(--muted),transparent)}
+
+/* SHARED */
+section{min-height:100vh;padding:9rem 8vw 6rem;position:relative;overflow:hidden}
+.s-label{
+  font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--lime);
+  margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem;
+}
+.s-label::before{content:'';width:1.8rem;height:1px;background:var(--lime)}
+.s-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,6vw,5.5rem);line-height:0.92;color:#fff;margin-bottom:1rem}
+.s-desc{color:var(--muted);font-size:0.98rem;max-width:540px;line-height:1.8;font-weight:300;margin-bottom:4.5rem}
+
+/* PILARES */
+#pilares{background:var(--dark2)}
+.pilares-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.pilar-card{background:var(--dark2);padding:3.5rem 2.8rem;position:relative;overflow:hidden;transition:background 0.3s}
+.pilar-card:hover{background:var(--card)}
+.pilar-card::before{content:attr(data-num);position:absolute;top:1rem;right:2rem;font-family:'Bebas Neue',sans-serif;font-size:5.5rem;color:rgba(200,240,0,0.05);line-height:1;pointer-events:none}
+.pilar-icon{width:44px;height:44px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:2rem}
+.pilar-icon svg{width:20px;height:20px;stroke:var(--lime);fill:none;stroke-width:1.5}
+.pilar-tag{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--lime);margin-bottom:0.8rem;display:block}
+.pilar-name{font-size:1.15rem;font-weight:600;color:#fff;margin-bottom:0.9rem}
+.pilar-desc{font-size:0.85rem;color:var(--muted);line-height:1.75}
+
+/* PROCESO */
+#proceso{background:var(--dark);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.proceso-content{}
+.proceso-img{position:relative}
+.proceso-img img{width:100%;height:500px;object-fit:cover;filter:grayscale(20%) brightness(0.85)}
+.proceso-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(200,240,0,0.08),transparent);
+  pointer-events:none;
+}
+.proceso-list{border-top:1px solid rgba(255,255,255,0.05);margin-top:2rem}
+.proceso-item{display:grid;grid-template-columns:70px 1fr;gap:1.5rem;padding:2rem 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.proceso-num{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:rgba(200,240,0,0.25);line-height:1}
+.proceso-name{font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.4rem}
+.proceso-desc{font-size:0.82rem;color:var(--muted);line-height:1.7}
+
+/* ADKAR */
+#cambio{background:var(--dark3);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.cambio-img img{width:100%;height:500px;object-fit:cover;filter:grayscale(20%) brightness(0.8)}
+.cambio-content{}
+.adkar-wrap{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:2rem}
+.adkar-card{background:var(--dark3);padding:2rem 1.2rem;text-align:center;transition:background 0.3s}
+.adkar-card:hover{background:var(--card)}
+.adkar-letter{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--lime);display:block;margin-bottom:0.3rem}
+.adkar-word{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#fff;margin-bottom:0.7rem;display:block}
+.adkar-desc{font-size:0.72rem;color:var(--muted);line-height:1.6}
+
+/* IA */
+#ia{background:var(--dark2);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.ia-img img{width:100%;height:500px;object-fit:cover;filter:grayscale(20%) brightness(0.8)}
+.ia-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}
+.ia-card{border:1px solid var(--border);padding:1.5rem;transition:border-color 0.3s,background 0.3s}
+.ia-card:hover{border-color:rgba(200,240,0,0.45);background:rgba(200,240,0,0.02)}
+.ia-dot{width:5px;height:5px;background:var(--lime);border-radius:50%;margin-bottom:1rem}
+.ia-title{font-size:0.88rem;font-weight:600;color:#fff;margin-bottom:0.4rem}
+.ia-desc{font-size:0.78rem;color:var(--muted);line-height:1.65}
+
+/* FASES */
+#fases{background:var(--dark);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.fases-img img{width:100%;height:500px;object-fit:cover;filter:grayscale(20%) brightness(0.8)}
+.fases-content{}
+.fases-blocks{display:flex;flex-direction:column;gap:3rem;margin-top:2rem}
+.fase-block{}
+.fase-head{display:flex;align-items:center;gap:1.2rem;margin-bottom:1.5rem}
+.fase-badge{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;background:var(--lime);color:#000;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fase-name{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#fff}
+.fase-steps{display:flex;flex-direction:column;gap:1.2rem}
+.fase-step{display:grid;grid-template-columns:2px 1fr;gap:1.5rem}
+.fase-line{background:rgba(200,240,0,0.2);border-radius:2px}
+.fase-step-title{font-size:0.85rem;font-weight:600;color:#fff;margin-bottom:0.3rem}
+.fase-step-desc{font-size:0.78rem;color:var(--muted);line-height:1.65}
+
+/* PASOS */
+#pasos{background:#000;display:block}
+.pasos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.paso-card{background:#000;padding:3.5rem 2.8rem;transition:background 0.3s}
+.paso-card:hover{background:#0a0a0a}
+.paso-num{font-family:'Bebas Neue',sans-serif;font-size:5rem;color:var(--lime);opacity:0.15;line-height:1;margin-bottom:1.5rem}
+.paso-title{font-size:1.05rem;font-weight:600;color:#fff;margin-bottom:0.8rem}
+.paso-desc{font-size:0.85rem;color:var(--muted);line-height:1.75}
+
+/* FOOTER */
+footer{background:#000;border-top:1px solid var(--border);padding:2.5rem 8vw;display:flex;justify-content:space-between;align-items:center}
+.footer-logo img{height:28px}
+.footer-copy{font-size:0.7rem;color:var(--muted);letter-spacing:0.07em}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  #proceso,#cambio,#ia,#fases{grid-template-columns:1fr;gap:3rem}
+  .proceso-img,.cambio-img,.ia-img,.fases-img{order:-1}
+  .proceso-img img,.cambio-img img,.ia-img img,.fases-img img{height:280px}
+}
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}.nav-links{display:none}
+  section{padding:7rem 5vw 4rem}
+  .pilares-grid{grid-template-columns:1fr}
+  .adkar-wrap{grid-template-columns:1fr 1fr}
+  .ia-grid{grid-template-columns:1fr}
+  .pasos-grid{grid-template-columns:1fr}
+  .proceso-item{grid-template-columns:55px 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><img src="assets/logo.png" alt="Ordexes"></div>
+  <ul class="nav-links">
+    <li><a href="#pilares">Pilares</a></li>
+    <li><a href="#proceso">Procesos</a></li>
+    <li><a href="#cambio">Cambio</a></li>
+    <li><a href="#ia">IA</a></li>
+    <li><a href="#fases">Fases</a></li>
+    <li><a href="#pasos">Inicio</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <span class="hero-tag">Ordexes &middot; Inteligencia Artificial</span>
+    <h1 class="hero-title">Tu empresa,<br><em>evoluciona.</em></h1>
+    <p class="hero-sub">Inteligencia Artificial aplicada a tus procesos. Orden, metodolog&iacute;a y tecnolog&iacute;a al servicio de tu empresa.</p>
+    <a href="#pilares" class="hero-cta">Descubrir c&oacute;mo &rarr;</a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- 3 PILARES -->
+<section id="pilares">
+  <div class="s-label">Fundamentos</div>
+  <h2 class="s-title">3 Pilares de<br>Evoluci&oacute;n Digital</h2>
+  <div class="pilares-grid reveal">
+    <div class="pilar-card" data-num="01">
+      <div class="pilar-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <span class="pilar-tag">01 &mdash; Fundaci&oacute;n</span>
+      <div class="pilar-name">Excelencia en Procesos</div>
+      <p class="pilar-desc">Mapeamos, documentamos y optimizamos c&oacute;mo trabaja tu empresa antes de tocar cualquier tecnolog&iacute;a. Primero el orden, luego la transformaci&oacute;n.</p>
+    </div>
+    <div class="pilar-card" data-num="02">
+      <div class="pilar-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <span class="pilar-tag">02 &mdash; Personas</span>
+      <div class="pilar-name">Gesti&oacute;n del Cambio</div>
+      <p class="pilar-desc">Detr&aacute;s de la tecnolog&iacute;a, siempre estar&aacute;n personas. Usamos metodolog&iacute;as &aacute;giles basadas en comportamiento humano. Libera el potencial de sinergia tecnol&oacute;gica.</p>
+    </div>
+    <div class="pilar-card" data-num="03">
+      <div class="pilar-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></div>
+      <span class="pilar-tag">03 &mdash; Tecnolog&iacute;a</span>
+      <div class="pilar-name">Inteligencia Artificial</div>
+      <p class="pilar-desc">Identificamos casos de uso de IA y otras tecnolog&iacute;as. Los analizamos y priorizamos con metodolog&iacute;a cuantitativa. Genera el m&aacute;ximo valor.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso">
+  <div class="proceso-content reveal">
+    <div class="s-label">Pilar 01</div>
+    <h2 class="s-title">Excelencia<br>en Procesos</h2>
+    <p class="s-desc" style="margin-bottom:0">Primero el orden, luego la transformaci&oacute;n.</p>
+    <div class="proceso-list">
+      <div class="proceso-item">
+        <div class="proceso-num">01</div>
+        <div><div class="proceso-name">Mapeo AS IS</div><p class="proceso-desc">Documentamos c&oacute;mo funciona tu empresa hoy, sin suposiciones ni atajos.</p></div>
+      </div>
+      <div class="proceso-item">
+        <div class="proceso-num">02</div>
+        <div><div class="proceso-name">Diagn&oacute;stico de Pain Points</div><p class="proceso-desc">Identificamos cuellos de botella, redundancias y puntos de fricci&oacute;n.</p></div>
+      </div>
+      <div class="proceso-item">
+        <div class="proceso-num">03</div>
+        <div><div class="proceso-name">Dise&ntilde;o TO BE</div><p class="proceso-desc">Redise&ntilde;amos los procesos optimizados antes de aplicar cualquier tecnolog&iacute;a.</p></div>
+      </div>
+      <div class="proceso-item">
+        <div class="proceso-num">04</div>
+        <div><div class="proceso-name">Base S&oacute;lida</div><p class="proceso-desc">Construimos sobre cimientos firmes antes de escalar con tecnolog&iacute;a.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="proceso-img reveal"><img src="assets/img-proceso.png" alt="Procesos"></div>
+</section>
+
+<!-- CAMBIO -->
+<section id="cambio">
+  <div class="cambio-img reveal"><img src="assets/img-cambio.png" alt="Gesti&oacute;n del Cambio"></div>
+  <div class="cambio-content reveal">
+    <div class="s-label">Pilar 02</div>
+    <h2 class="s-title">Gesti&oacute;n<br>del Cambio</h2>
+    <p class="s-desc" style="margin-bottom:0">Libera el potencial de sinergia tecnol&oacute;gica &mdash; modelo ADKAR.</p>
+    <div class="adkar-wrap">
+      <div class="adkar-card"><span class="adkar-letter">A</span><span class="adkar-word">Awareness</span><p class="adkar-desc">Comunicamos por qu&eacute; el cambio es necesario para cada persona.</p></div>
+      <div class="adkar-card"><span class="adkar-letter">D</span><span class="adkar-word">Desire</span><p class="adkar-desc">Generamos motivaci&oacute;n genuina de participar y apoyar la transformaci&oacute;n.</p></div>
+      <div class="adkar-card"><span class="adkar-letter">K</span><span class="adkar-word">Knowledge</span><p class="adkar-desc">Capacitamos al equipo con el saber-hacer necesario.</p></div>
+      <div class="adkar-card"><span class="adkar-letter">A</span><span class="adkar-word">Ability</span><p class="adkar-desc">Acompa&ntilde;amos la puesta en pr&aacute;ctica con iteraciones.</p></div>
+      <div class="adkar-card"><span class="adkar-letter">R</span><span class="adkar-word">Reinforce</span><p class="adkar-desc">Reforzamos nuevos comportamientos para que el cambio sea permanente.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- IA -->
+<section id="ia">
+  <div class="ia-content reveal">
+    <div class="s-label">Pilar 03</div>
+    <h2 class="s-title">Inteligencia<br>Artificial</h2>
+    <p class="s-desc" style="margin-bottom:0">Genera el m&aacute;ximo valor. Casos de uso reales.</p>
+    <div class="ia-grid">
+      <div class="ia-card"><div class="ia-dot"></div><div class="ia-title">Atenci&oacute;n 24/7</div><p class="ia-desc">Chatbot aut&oacute;nomo que responde o agenda citas.</p></div>
+      <div class="ia-card"><div class="ia-dot"></div><div class="ia-title">Proceso de documentos</div><p class="ia-desc">Extracci&oacute;n autom&aacute;tica de facturas y contratos.</p></div>
+      <div class="ia-card"><div class="ia-dot"></div><div class="ia-title">Predicci&oacute;n de demanda</div><p class="ia-desc">Anticipa ventas e insumos necesarios.</p></div>
+      <div class="ia-card"><div class="ia-dot"></div><div class="ia-title">Generaci&oacute;n de contenido</div><p class="ia-desc">Propuestas, reportes y marketing autom&aacute;tico.</p></div>
+      <div class="ia-card"><div class="ia-dot"></div><div class="ia-title">Detecci&oacute;n de anomal&iacute;as</div><p class="ia-desc">Monitoreo para detectar errores o fraudes.</p></div>
+      <div class="ia-card"><div class="ia-dot"></div><div class="ia-title">Asistente de conocimiento</div><p class="ia-desc">Chatbot con tus manuales, procesos y pol&iacute;ticas.</p></div>
+    </div>
+  </div>
+  <div class="ia-img reveal"><img src="assets/img-ia.png" alt="Inteligencia Artificial"></div>
+</section>
+
+<!-- FASES -->
+<section id="fases">
+  <div class="fases-img reveal"><img src="assets/img-fases.png" alt="Fases"></div>
+  <div class="fases-content reveal">
+    <div class="s-label">Metodolog&iacute;a</div>
+    <h2 class="s-title">Evoluci&oacute;n:<br>2 Fases</h2>
+    <div class="fases-blocks">
+      <div class="fase-block">
+        <div class="fase-head"><div class="fase-badge">1</div><div class="fase-name">Discovery</div></div>
+        <div class="fase-steps">
+          <div class="fase-step"><div class="fase-line"></div><div><div class="fase-step-title">Diagn&oacute;stico &mdash; Mapeo AS IS</div><p class="fase-step-desc">Proceso, personas, herramientas y cultura. Identificamos Pain Points.</p></div></div>
+          <div class="fase-step"><div class="fase-line"></div><div><div class="fase-step-title">Redise&ntilde;o &mdash; TO BE</div><p class="fase-step-desc">Modelo operativo futuro, optimizado. KPIs, reglas y roles.</p></div></div>
+          <div class="fase-step"><div class="fase-line"></div><div><div class="fase-step-title">Casos de uso IA</div><p class="fase-step-desc">Evaluamos valor, estrategia y facilidad de implementaci&oacute;n.</p></div></div>
+        </div>
+      </div>
+      <div class="fase-block">
+        <div class="fase-head"><div class="fase-badge">2</div><div class="fase-name">Build &amp; Deploy</div></div>
+        <div class="fase-steps">
+          <div class="fase-step"><div class="fase-line"></div><div><div class="fase-step-title">Procuraci&oacute;n &mdash; ROI</div><p class="fase-step-desc">Adquisici&oacute;n tecnol&oacute;gica con foco en generaci&oacute;n de valor.</p></div></div>
+          <div class="fase-step"><div class="fase-line"></div><div><div class="fase-step-title">Implementaci&oacute;n &Aacute;gil</div><p class="fase-step-desc">Sprints cortos, entregables funcionales. Modelo ADKAR.</p></div></div>
+          <div class="fase-step"><div class="fase-line"></div><div><div class="fase-step-title">Seguimiento &mdash; Medici&oacute;n</div><p class="fase-step-desc">Adopci&oacute;n iterativa. Medimos, aprendemos y ajustamos.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGUIENTES PASOS -->
+<section id="pasos">
+  <div class="s-label">&iquest;Listo?</div>
+  <h2 class="s-title">Siguientes<br>Pasos</h2>
+  <div class="pasos-grid reveal">
+    <div class="paso-card"><div class="paso-num">01</div><div class="paso-title">Sesi&oacute;n de diagn&oacute;stico inicial</div><p class="paso-desc">Reuni&oacute;n para entender tu negocio, visi&oacute;n y estrategia. Pain points y oportunidades.</p></div>
+    <div class="paso-card"><div class="paso-num">02</div><div class="paso-title">Propuesta personalizada</div><p class="paso-desc">Roadmap espec&iacute;fico seg&uacute;n alcance, procesos, problem&aacute;tica y requerimientos.</p></div>
+    <div class="paso-card"><div class="paso-num">03</div><div class="paso-title">Inicio</div><p class="paso-desc">Alineaci&oacute;n de equipo, campe&oacute;n interno y planeaci&oacute;n de alto nivel por fases.</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo"><img src="assets/logo-small.png" alt="Ordexes"></div>
+  <span class="footer-copy">&copy; 2025 Ordexes &middot; Inteligencia Artificial Aplicada</span>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    e.target.querySelectorAll('.pilar-card,.ia-card,.adkar-card,.paso-card,.fase-step,.proceso-item').forEach((c,i) => {
+      c.style.cssText='opacity:0;transform:translateY(16px);transition:opacity 0.5s ease,transform 0.5s ease';
+      setTimeout(()=>{c.style.opacity='1';c.style.transform='none';},i*70);
+    });
+    obs.unobserve(e.target);
+  });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+const secs=document.querySelectorAll('section[id]');
+const links=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-220)cur=s.id;});
+  links.forEach(a=>{a.style.color=a.getAttribute('href')==='#'+cur?'var(--lime)':'';});
+},{passive:true});
+</script>
+</body>
+</html>
